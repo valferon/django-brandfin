@@ -1,0 +1,61 @@
+{% extends "brandfin/base.html" %}
+
+{% block sql_brandfin_navbar %}{% endblock %}
+{% block sql_brandfin_content %}
+{% if schema %}
+<h4 class="center">Schema </h4>
+<h5 class="center"> {{ schema.schemaName }} <===> Last updated the {{ schema.lastRefresh }} </h5>
+
+<div id="tables">
+
+    <input class="search" placeholder="Search"/> <br>
+    <ul class="list">
+        {% for t in schema_lst %}
+        <li>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="name panel-title">{{ t.0 }} </h4>
+                </div>
+                <table class="table table-condensed table-hover">
+                    <thead>
+                    </thead>
+                    <tbody>
+                    {% for c in t.1 %}
+                    <tr>
+                        <td width="50%"><code> {{ c.0 }} </code></td>
+                        <!-- This will show the type of the column as well -->
+                        <td width="50%" class="text-muted">
+                            <small> {{ c.1 }}</small>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% else %}
+    <div class="alert alert-info">
+            No datasource schema to display
+    </div>
+{% endif %}
+{% endblock %}
+{% block sql_brandfin_footer %}{% endblock %}
+
+{% block sql_brandfin_scripts %}
+<script>
+    $(function() {
+        function SearchFocus() {
+            $(".search").focus();
+        }
+        var options = {
+            valueNames: [ 'name', 'app' ],
+            handlers: { 'updated': [SearchFocus] }
+        };
+        var tableList = new List('tables', options);
+    });
+
+</script>
+{% endblock %}

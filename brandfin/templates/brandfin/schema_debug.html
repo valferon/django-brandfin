@@ -1,0 +1,53 @@
+{% extends "brandfin/base.html" %}
+
+{% block sql_brandfin_navbar %}{% endblock %}
+{% block sql_brandfin_content %}
+
+<h4 class="center">Schema</h4>
+<div id="tables">
+    <input class="search" placeholder="Search"/>
+    <ul class="list">
+        {% for m in schema %}
+        <li>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <small class="text-muted app">{{ schema.schemaName }}</small>
+                    <h4 class="name panel-title">{{ m.0 }}</h4>
+                </div>
+                <table class="table table-condensed table-hover">
+                    <thead>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td width="50%"><code>{{ m.1.0 }}</code></td>
+                        <!-- This will show the type of the column as well -->
+                        <td width="50%" class="text-muted">
+                            <small>{{ m.1.1 }}</small>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{#{% filter force_escape %} {% debug %} {% endfilter %}#}
+{% endblock %}
+{% block sql_brandfin_footer %}{% endblock %}
+
+{% block sql_brandfin_scripts %}
+<script>
+    $(function() {
+        function SearchFocus() {
+            $(".search").focus();
+        }
+        var options = {
+            valueNames: [ 'name', 'app' ],
+            handlers: { 'updated': [SearchFocus] }
+        };
+        var tableList = new List('tables', options);
+    });
+
+</script>
+{% endblock %}

@@ -1,0 +1,78 @@
+{% load url from future %}
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brandfin - SQL Explorer{% if query %} - {{ query.title }}{% elif title %} - {{ title }}{% endif %}</title>
+
+    <link href="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.7.0/codemirror.min.css" rel="stylesheet"/>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="{% static 'brandfin/charted/charted.css' %}"/>
+    <link rel="stylesheet" href="{% static 'brandfin/brandfin.css' %}"/>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+
+    <script src="{% static 'brandfin/brandfin.js' %}"></script>
+    <script src="{% static 'brandfin/charted/lib/d3.js' %}"></script>
+    <script src="{% static 'brandfin/charted/lib/lodash.compat.js' %}"></script>
+    <script src="{% static 'brandfin/charted/Utils.js' %}"></script>
+    <script src="{% static 'brandfin/charted/PageData.js' %}"></script>
+    <script src="{% static 'brandfin/charted/ChartLegend.js' %}"></script>
+    <script src="{% static 'brandfin/charted/ChartData.js' %}"></script>
+    <script src="{% static 'brandfin/charted/Chart.js' %}"></script>
+    <script src="{% static 'brandfin/charted/PageController.js' %}"></script>
+    <script type="text/javascript">
+        dataUrl = "{{ dataUrl }}";
+        queryId = "{% firstof query.id 'new' %}";
+
+    </script>
+</head>
+
+<body>
+<div id="wrap" class="wrap">
+    {% block sql_brandfin_navbar %}
+    <div class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="../">Brandfin</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    {% block sql_brandfin_navlinks %}{% endblock %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+    <div class="container">
+        <div class="starter-template">
+            {% block sql_brandfin_content %}{% endblock %}
+
+        </div>
+        {% block sql_brandfin_bottom %}{% endblock %}
+    </div>
+</div>
+{% block sql_brandfin_footer %}
+<div id="footer">
+    <div class="container">
+        <p class="text-muted">
+            Powered by <a href="https://www.djangoproject.com/">django</a>.
+        </p>
+    </div>
+</div>
+{% endblock %}
+<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.1.1/list.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.7.0/codemirror.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.7.0/mode/sql/sql.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/floatthead/1.2.8/jquery.floatThead-slim.min.js"></script>
+{% block sql_brandfin_scripts %}{% endblock %}
+</body>
+
+</html>
