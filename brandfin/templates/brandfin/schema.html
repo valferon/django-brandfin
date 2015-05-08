@@ -3,9 +3,10 @@
 {% block sql_brandfin_navbar %}{% endblock %}
 {% block sql_brandfin_content %}
 {% if schema %}
-<h4 class="center">Schema </h4>
-<h5 class="center"> {{ schema.schemaName }} <===> Last updated the {{ schema.lastRefresh }} </h5>
-
+<h4 class="center"> Schema </h4>
+<div class="alert alert-info">
+Last schema update for {{ schema.schemaName }} on {{ schema.lastRefresh }}
+</div>
 <div id="tables">
 
     <input class="search" placeholder="Search"/> <br>
@@ -37,6 +38,7 @@
     </ul>
 </div>
 {% else %}
+<h4> Schema </h4>
     <div class="alert alert-info">
             No datasource schema to display
     </div>

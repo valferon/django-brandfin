@@ -3,6 +3,8 @@ import csv
 import json
 import re
 import string
+import datetime
+from decimal import Decimal
 
 import django.db
 from django.http import HttpResponse
@@ -16,7 +18,14 @@ from six.moves import cStringIO
 EXPLORER_PARAM_TOKEN = "$$"
 
 # SQL Specific Things
-
+class AlchemyEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, datetime.date):
+            return obj.isoformat()
+        elif isinstance(obj, Decimal):
+            return float(obj)
+        else:
+            return super(AlchemyEncoder, self).default(obj)
 
 def query_data_to_list(data_result):
     myList = []
@@ -207,3 +216,4 @@ def user_can_see_query(request, kwargs):
 
 def fmt_sql(sql):
     return sqlparse.format(sql, reindent=True, keyword_case='upper')
+

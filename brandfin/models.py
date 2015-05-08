@@ -1,4 +1,5 @@
-from time import time
+
+m time import time
 from datetime import datetime
 import logging
 import decimal
@@ -8,11 +9,11 @@ from django.core.urlresolvers import reverse
 from django.conf import settings
 import six
 import sqlalchemy
-import simplejson as json
+import json
 
 
 
-from utils import passes_blacklist, swap_params, extract_params, shared_dict_update, get_dataconnection_engine, get_dataconnection_active
+from utils import passes_blacklist, swap_params, extract_params, shared_dict_update, get_dataconnection_engine, AlchemyEncoder
 import app_settings
 
 MSG_FAILED_BLACKLIST = "Query failed the SQL blacklist."
@@ -56,13 +57,11 @@ class Query(models.Model):
     def final_sql(self):
         return swap_params(self.sql, self.params)
 
-
-    def alchemy_encoder(self, obj):
-        """JSON encoder function for SQLAlchemy special classes."""
-        if isinstance(obj, datetime):
-            return obj.isoformat()
-        elif isinstance(obj, decimal.Decimal):
-            return float(obj)
+    def format_int_in_list(self,L):
+        for index, elem in enumerate(L):
+            if isinstance(elem, (int, long)):
+                L[index] = str("{:,}".format(elem))
+        return L
 
     def try_execute(self):
         """
@@ -82,8 +81,9 @@ class Query(models.Model):
 
             data_list = []
             for tupl in query_obj.data:
-                data_list.append(list(tupl))
-            self.result_data = json.dumps(data_list, default=self.alchemy_encoder)
+                data_list.append(self.format_int_in_list(list(tupl)))
+            self.result_data = json.dumps(data_list, cls=AlchemyEncoder)
+            logger._log(self, 'DEBUG', self.result_data)
             self.save()
             return query_obj
         else:
@@ -243,6 +243,7 @@ class Schema(models.Model):
 
     def get_schema_data(self):
         return json.loads(self.schemaData)
+
 
 
 
