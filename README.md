@@ -9,7 +9,8 @@ Beta version
 - Store the report query result in the django database as Json for quick display and with 'Refresh Data' function to re-run the query against the DB
 
 
-* Todo
+Todo
+
 - add a command to refresh reports by running all queries against the DB
 - include a relation between db datasource and reports to allow multiple database sources ( currently only one active datasource at a time)
 - add helpers to create query (sum,....)
