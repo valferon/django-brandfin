@@ -8,6 +8,8 @@ from django.core.urlresolvers import reverse
 from django.conf import settings
 import six
 import sqlalchemy
+from sqlalchemy import exc
+import psycopg2
 import json
 
 
@@ -145,10 +147,10 @@ class QueryResult(object):
 
             if hasattr(res,'fetchall'):
                 self._data = res.fetchall()
+                self._headers = res._metadata.keys
             else:
                 self._data = None
-
-            self._headers = res._metadata.keys
+                self._headers = None
 
         else:
             self.sql = sql
@@ -173,7 +175,11 @@ class QueryResult(object):
         start_time = time()
         try:
             if hasattr(conn,'execute'):
-                res = conn.execute(self.sql)
+                try:
+                    res = conn.execute(self.sql)
+                except exc.SQLAlchemyError:
+                    res = None
+                    pass
             else:
                 res = None
         except DatabaseError as e:

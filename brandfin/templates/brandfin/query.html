@@ -4,7 +4,6 @@
 {% block sql_brandfin_navlinks %}
 {% if can_change %}
 <li{% if not query %} class="active" {% endif %}><a href="../new/">New Report</a></li>
-<li><a href="../play/">Playground</a></li>
 {% endif %}
 {% if query %}
 <li class="active"><a href="">Report Detail</a></li>{% endif %}
@@ -98,8 +97,6 @@
                             <input type="submit" value="Refresh Data" class="btn btn-default"
                                    id="refresh_data_button"/>
                             <button class="btn btn-default download_button" href="csv">Download CSV</button>
-                            <input type="submit" value="Open in Playground" class="btn btn-default"
-                                   id="playground_button"/>
                             {% endif %}
                             <button type="button" class="btn btn-default" id="show_schema_button">Show Schema</button>
                             <button type="button" class="btn btn-default" id="hide_schema_button">Hide Schema</button>
