@@ -9,7 +9,6 @@ from django.conf import settings
 import six
 import sqlalchemy
 from sqlalchemy import exc
-import psycopg2
 import json
 
 
@@ -31,6 +30,7 @@ class Query(models.Model):
     created_by_user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     last_run_date = models.DateTimeField(auto_now=True)
+    daily_run = models.BooleanField(default=False, help_text="Schedule query to run daily")
 
 
     def __unicode__(self):

@@ -51,7 +51,8 @@ class QueryForm(ModelForm):
 
     class Meta:
         model = Query
-        fields = ['title', 'sql', 'description', 'created_by_user']
+        daily_run = forms.BooleanField(initial=False)
+        fields = ['title', 'sql', 'description', 'created_by_user', 'daily_run']
 
 
 class DataConnectionForm(forms.ModelForm):

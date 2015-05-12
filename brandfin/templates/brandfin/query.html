@@ -54,20 +54,26 @@
                     <div class="form-group">
                         <label for="id_title" class="col-sm-2 control-label">Active Datasource </label>
                         <div class="col-sm-10">
-                        <textarea class="form-control" cols="40" id="id_description" name="description" disabled rows="2">Redshift</textarea>
+                        <textarea class="form-control" cols="40" id="id_description" name="description" disabled rows="2">{{ datasource }}</textarea>
                     </div>
                     </div>
                 {% endif %}
                 {% if query %}
                     <div class="form-group">
                         {{ form.created_by_user.errors }}
-                        <label for="id_title" class="col-sm-2 control-label" >Created By</label>
+                        <label for="id_title" class="col-sm-2 control-label" >Created By </label>
                         <div class="col-sm-10">
                             <span class="form-control" disabled id="id_created_by_user_label" maxlength="255" name="created_by_user_label">{{ form.created_by_user_email }}</span>
                             <input type="hidden" id="id_created_by_user" name="created_by_user" value="{{ form.created_by_user_id }}" />
                         </div>
                     </div>
                 {% endif %}
+                <div class="form-group">
+                        <label for="id_title" class="col-sm-2 control-label" >Run report daily <br>(use with caution) </label>
+                        <div class="col-sm-10">
+                            <input type="checkbox" id="id_daily_run" name="daily_run" {% if query.daily_run %}checked{% endif %} />
+                        </div>
+                    </div>
                 {% if form.sql.errors %}{% for error in form.sql.errors %}
                     <div class="alert alert-danger">{{ error|escape }}</div>
                 {% endfor %}{% endif %}

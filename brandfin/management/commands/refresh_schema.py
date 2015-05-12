@@ -1,9 +1,9 @@
 from django.core.management.base import BaseCommand, CommandError
 from sqlalchemy import inspect
-import simplejson as json
+import json
 
-from explorer.models import Schema, DataConnection
-from explorer.utils import _format_sqlalch_field
+from models import Schema, DataConnection
+from utils import _format_sqlalch_field
 
 
 class Command(BaseCommand):
