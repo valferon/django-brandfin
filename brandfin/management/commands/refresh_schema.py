@@ -2,7 +2,7 @@ from django.core.management.base import BaseCommand, CommandError
 from sqlalchemy import inspect
 import json
 
-from models import Schema, DataConnection
+from brandfin.models import Schema, DataConnection
 from utils import _format_sqlalch_field
 
 

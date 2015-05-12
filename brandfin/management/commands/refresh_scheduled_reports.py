@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand, CommandError
 import datetime
 
-from models import Query
+from brandfin.models import Query
 
 
 class Command(BaseCommand):
