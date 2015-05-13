@@ -84,7 +84,6 @@ class Query(models.Model):
             for tupl in query_obj.data:
                 data_list.append(self.format_int_in_list(list(tupl)))
             self.result_data = json.dumps(data_list, cls=AlchemyEncoder)
-            logger._log(self, 'DEBUG', self.result_data)
             self.save()
             return query_obj
         else:

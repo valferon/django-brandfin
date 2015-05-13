@@ -98,7 +98,6 @@ button {
 }
 /* mobile browser input styling */
 input {
-  -webkit-appearance: none;
   border-radius: 0;
   border: none;
   margin: 0;
