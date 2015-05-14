@@ -17,13 +17,13 @@ Last schema update for {{ schema.schemaName }} on {{ schema.lastRefresh }}
                 <div class="panel-heading">
                     <h4 class="name panel-title">{{ t.0 }} </h4>
                 </div>
-                <table class="table table-condensed table-hover">
+                <table class="table table-condensed table-hover list">
                     <thead>
                     </thead>
                     <tbody>
                     {% for c in t.1 %}
                     <tr>
-                        <td width="50%"><code> {{ c.0 }} </code></td>
+                        <td width="50%" class="tabcolumn">{{ c.0 }}</td>
                         <!-- This will show the type of the column as well -->
                         <td width="50%" class="text-muted">
                             <small> {{ c.1 }}</small>
@@ -53,7 +53,7 @@ Last schema update for {{ schema.schemaName }} on {{ schema.lastRefresh }}
             $(".search").focus();
         }
         var options = {
-            valueNames: [ 'name', 'app' ],
+            valueNames: [ 'name', 'tabcolumn' ],
             handlers: { 'updated': [SearchFocus] }
         };
         var tableList = new List('tables', options);
