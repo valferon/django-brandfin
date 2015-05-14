@@ -47,7 +47,7 @@
         </thead>
         <tbody class="list">
         {% for object in object_list %}
-        <tr {% if object.is_in_category %}class="collapse in collapse-{{ object.collapse_target }}" {% endif %}>
+        <tr {% if object.is_in_category %}class="collapse collapse-{{ object.collapse_target }}" {% endif %}>
             {% if object.is_header %}
             <td>
                 <strong>
