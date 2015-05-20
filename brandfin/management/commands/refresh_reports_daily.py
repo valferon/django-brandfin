@@ -15,6 +15,7 @@ class Command(BaseCommand):
         :param options:
         """
 
+        self.stdout.write('Starting refres reports task')
         today = datetime.date.today().strftime('%Y-%m-%d')
         scheduled_reports = Query.objects.filter(daily_run=True)
 
