@@ -134,10 +134,11 @@ ExplorerEditor.prototype.bind = function() {
     }.bind(this));
 
     $("#save_template_button").click(function() {
-        console.log(this.queryId)
-//        this.$form.attr('action', '../' + this.queryId + '/');
         this.$form.attr('action', '');
+    }.bind(this));
 
+    $("#save_to_report_button").click(function() {
+        this.$form.attr('action', '../new/');
     }.bind(this));
 
     $("#refresh_button").click(function(e) {
