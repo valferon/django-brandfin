@@ -3,7 +3,7 @@
 {% block sql_brandfin_navlinks %}
 {% if can_change %}
 <li><a href="new/">New Report</a></li>
-<li><a href="#">New Template</a></li>
+<li><a href="../new_template/">New Template</a></li>
 <li><a href="logs/">Logs</a></li>
 {% endif %}
 {% endblock %}
@@ -83,26 +83,8 @@
         </tbody>
     </table>
 </div>
-<h3 class="querylist-header">All templates</h3>
-<div id="queries">
-    <input class="search" placeholder="Search"/>
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>Template</th>
-            <th>Created</th>
-            <th>Description</th>
-            {% if can_change %}
-            <th>Delete</th>
-            {% endif %}
-        </tr>
-        </thead>
-        <tbody class="list">
-        </tbody>
-    </table>
-</div>
+{% include 'brandfin/template_list.html' %}
 {% endblock %}
-
 {% block sql_brandfin_scripts %}
 <script>
     $(function() {

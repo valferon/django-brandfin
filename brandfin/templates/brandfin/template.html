@@ -1,0 +1,104 @@
+{% extends "brandfin/base.html" %}
+{% load url from future %}
+
+{% block sql_brandfin_navlinks %}
+{% if can_change %}
+<li xmlns="http://www.w3.org/1999/html"/><a href="../new/">New Report</a></li>
+{% endif %}
+<li><a href="../new_template/">New Template</a></li>
+{% if query %}
+<li class="active"><a href="">Report Detail</a></li>{% endif %}
+<li><a href="../logs/">Logs</a></li>
+{% endblock %}
+
+{% block sql_brandfin_content %}
+<div class="row">
+    <div id="query_area" class="col-md-12 query-area">
+        <h2>{% if template %}{{ template.title }}{% endif %}</h2>
+        {% if message %}
+        <div class="alert alert-info">{{ message }}</div>
+        {% endif %}
+        <div>
+            <form role="form" class="form-horizontal" action="../{% firstof template.id 'new_template' %}/" method="post"
+                  id="editor">{% csrf_token %}
+                {% if error %}
+                <div class="alert alert-danger">{{ error|escape }}</div>
+                {% endif %}
+                {{ form.non_field_errors }}
+                <div class="form-group">
+                    {% if form.title.errors %}{% for error in form.title.errors %}
+                    <div class="alert alert-danger">{{ error|escape }}</div>
+                    {% endfor %}{% endif %}
+                    <label for="id_title" class="col-sm-2 control-label" >Report Title</label>
+
+                    <div class="col-sm-10">
+                        <input class="form-control" id="id_title" data-toggle="tooltip" data-placement="left" data-original-title="Prefered title format : Template - [TemplateName]" maxlength="255" name="title" type="text" value="{{ form.title.value|default_if_none:"" }}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    {{ form.description.errors }}
+                    <label for="id_title" class="col-sm-2 control-label">Description</label>
+                    <div class="col-sm-10">
+                        <textarea class="form-control" cols="40" id="id_description" name="description"  rows="2">{{ form.description.value|default_if_none:"" }}</textarea>
+                    </div>
+                </div>
+                {% if template %}
+                    <div class="form-group">
+                        {{ form.created_by_user.errors }}
+                        <label for="id_title" class="col-sm-2 control-label" >Created By </label>
+                        <div class="col-sm-10">
+                            <span class="form-control" 5disabled id="id_created_by_user_label" maxlength="255" disabled name="created_by_user_label">{{ form.created_by_user_email }}</span>
+                            <input type="hidden" id="id_created_by_user" name="created_by_user"  value="{{ form.created_by_user_id }}" />
+                        </div>
+                    </div>
+                {% endif %}
+                {% if form.sql.errors %}{% for error in form.sql.errors %}
+                    <div class="alert alert-danger">{{ error|escape }}</div>
+                {% endfor %}{% endif %}
+                <div class="panel panel-default sql-panel">
+                    <div class="panel-heading">
+                        <span class="panel-title">SQL</span>
+                    </div>
+                    <div class="panel-content">
+                        <textarea class="form-control" cols="40"
+                                  id="id_sql" name="sql" rows="10">{{ form.sql.value|default_if_none:"" }}</textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="btn-group-wrap">
+                        <div class="btn-group">
+                            <input type="submit" class="btn btn-default" name="template_save" id="save_template_button" value="Save Template"/>
+                            <input type="submit" class="btn btn-default" name="template_to_report" id="save_button" value="Save as New Report"/>
+                            <button type="button" class="btn btn-default" id="show_schema_button">Show Schema</button>
+                            <button type="button" class="btn btn-default" id="hide_schema_button">Hide Schema</button>
+                            <button type="button" class="btn btn-default" id="format_button">Format</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+    <div id="schema" class="schema-frame">
+        <iframe src="" height="630px" frameBorder="0" id="schema_frame"></iframe>
+    </div>
+
+</div>
+{% include 'brandfin/preview_pane.html' %}
+{% endblock %}
+
+{% block sql_brandfin_scripts %}
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip({
+            placement : 'top'
+        });
+    });
+</script> 
+<script>
+        $(function() {
+            var e = new ExplorerEditor(queryId, dataUrl);
+        });
+
+</script>
+{% endblock %}

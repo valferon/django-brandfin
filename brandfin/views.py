@@ -15,12 +15,13 @@ from django.db import DatabaseError
 import app_settings
 from sqlalchemy import inspect
 
-from .models import Query, QueryLog, Schema, DataConnection
+from .models import Query, QueryLog, Schema, DataConnection, ReportTemplate
 
-from forms import QueryForm
+from forms import QueryForm, TemplateForm
 from utils import url_get_rows, \
     url_get_query_id, \
     url_get_log_id, \
+    url_get_template_id, \
     url_get_params, \
     safe_admin_login_prompt, \
     build_download_response, \
@@ -159,6 +160,7 @@ class ListQueryView(ExplorerContextMixin, ListView):
         context['object_list'] = self._build_queries_and_headers()
         context['recent_queries'] = Query.objects.all().order_by('-last_run_date')[
                                     :app_settings.EXPLORER_RECENT_QUERY_COUNT]
+        context['template_list'] = ReportTemplate.objects.all()
         return context
 
     def get_queryset(self):
@@ -208,6 +210,7 @@ class ListQueryView(ExplorerContextMixin, ListView):
         return dict_list
 
     model = Query
+
 
 
 class ListQueryLogView(ExplorerContextMixin, ListView):
@@ -301,6 +304,7 @@ class PlayQueryView(ExplorerContextMixin, View):
                                     query_viewmodel(request, query, title="Playground", show_results=show_results))
 
 
+
 class QueryView(ExplorerContextMixin, View):
     @method_decorator(view_permission)
     def dispatch(self, *args, **kwargs):
@@ -333,7 +337,6 @@ class QueryView(ExplorerContextMixin, View):
         form = QueryForm(request.POST if len(request.POST) else None, instance=query)
         return query, form
 
-
 def query_viewmodel(request, query, title=None, form=None, message=None, show_results=True, datasource=None):
     rows = url_get_rows(request)
     res = None
@@ -363,3 +366,66 @@ def query_viewmodel(request, query, title=None, form=None, message=None, show_re
         #'has_stats': len([h for h in res.headers if h.summary]) if not error and show_results else False,
         'dataUrl': reverse_lazy('query_csv', kwargs={'query_id': query.id}) if query.id else ''})
 
+
+class CreateTemplateView(ExplorerContextMixin, CreateView):
+    @method_decorator(change_permission)
+    def dispatch(self, *args, **kwargs):
+        return super(CreateTemplateView, self).dispatch(*args, **kwargs)
+
+    def form_valid(self, form):
+        form.instance.created_by_user = self.request.user
+        return super(CreateTemplateView, self).form_valid(form)
+
+    form_class = TemplateForm
+    template_name = 'brandfin/template.html'
+
+class DeleteTemplateView(ExplorerContextMixin, DeleteView):
+    @method_decorator(change_permission)
+    def dispatch(self, *args, **kwargs):
+        return super(DeleteTemplateView, self).dispatch(*args, **kwargs)
+
+    model = ReportTemplate
+    slug_field = 'template_id'
+    success_url = reverse_lazy("explorer_index")
+
+class TemplateView(ExplorerContextMixin, View):
+    @method_decorator(view_permission)
+    def dispatch(self, *args, **kwargs):
+        return super(TemplateView, self).dispatch(*args, **kwargs)
+
+    def get(self, request, template_id):
+        template, form = TemplateView.get_instance_and_form(request, template_id)
+        template.save()  # updates the modified date
+        vm = template_viewmodel(request, template, form=form)
+        return self.render_template('brandfin/template.html', vm)
+
+    def post(self, request, template_id):
+        if not app_settings.EXPLORER_PERMISSION_CHANGE(request.user):
+            return HttpResponseRedirect(
+                reverse_lazy('template_detail', kwargs={'template_id': template_id})
+            )
+
+        template, form = TemplateView.get_instance_and_form(request, template_id)
+        success = form.is_valid() and form.save()
+
+        if form.has_changed():
+            template.log(request.user)
+        vm = template_viewmodel(request, template, form=form, message="Template saved." if success else None)
+        return self.render_template('brandfin/template.html', vm)
+
+    @staticmethod
+    def get_instance_and_form(request, template_id):
+        template = get_object_or_404(ReportTemplate, pk=template_id)
+        form = TemplateForm(request.POST if len(request.POST) else None, instance=template)
+        return template, form
+
+
+
+def template_viewmodel(request, template, title=None, form=None, message=None):
+    error = None
+    return RequestContext(request, {
+        'title': title,
+        'template': template,
+        'form': form,
+        'message': message,
+        'error': error})

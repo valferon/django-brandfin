@@ -1,20 +1,17 @@
 from time import time
 from datetime import datetime
 import logging
-import decimal
+import json
 
 from django.db import models, DatabaseError
 from django.core.urlresolvers import reverse
 from django.conf import settings
-import six
 import sqlalchemy
 from sqlalchemy import exc
-import json
-
-
 
 from utils import passes_blacklist, swap_params, extract_params, shared_dict_update, get_dataconnection_engine, AlchemyEncoder
 import app_settings
+
 
 MSG_FAILED_BLACKLIST = "Query failed the SQL blacklist."
 
@@ -32,9 +29,8 @@ class Query(models.Model):
     last_run_date = models.DateTimeField(auto_now=True)
     daily_run = models.BooleanField(default=False, help_text="Schedule query to run daily")
 
-
     def __unicode__(self):
-        return self.reportName
+        return self.title
 
     def __init__(self, *args, **kwargs):
         self.params = kwargs.get('params')
@@ -48,12 +44,8 @@ class Query(models.Model):
     def data_time_refresh(self):
         self.lastRefresh = datetime.now()
 
-    def __unicode__(self):
-        return six.text_type(self.title)
-
     def passes_blacklist(self):
         return passes_blacklist(self.final_sql())
-
 
     def final_sql(self):
         return swap_params(self.sql, self.params)
@@ -94,7 +86,6 @@ class Query(models.Model):
             query_obj.duration = ((time() - start_time) * 1000)
             return query_obj
 
-
     def available_params(self):
         """
             Merge parameter values into a dictionary of available parameters
@@ -132,6 +123,24 @@ class QueryLog(models.Model):
 
     class Meta:
         ordering = ['-run_at']
+
+class ReportTemplate(models.Model):
+    title = models.CharField(max_length=100, help_text="Template title")
+    description = models.CharField(max_length=100, help_text="Template description")
+    sql = models.TextField()
+    created_by_user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __unicode__(self):
+            return self.title
+
+    def log(self, user):
+        log_entry = QueryLog(sql=self.sql, query_id=self.id, run_by_user=user, is_playground=not bool(self.id))
+        log_entry.save()
+
+    @property
+    def shared(self):
+        return self.id in set(sum(app_settings.EXPLORER_GET_USER_QUERY_VIEWS().values(), []))
 
 
 class QueryResult(object):

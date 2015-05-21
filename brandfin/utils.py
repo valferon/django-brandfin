@@ -28,27 +28,26 @@ class AlchemyEncoder(json.JSONEncoder):
             return super(AlchemyEncoder, self).default(obj)
 
 def query_data_to_list(data_result):
-    myList = []
+    my_list = []
     for row in data_result:
-        myList.append([str(elem).encode('utf8') for elem in row])
-    return myList
+        my_list.append([str(elem).encode('utf8') for elem in row])
+    return my_list
 
 
 def query_header_to_list(header_result):
-    myList = []
+    my_list = []
     for row in header_result:
-        myList.append(str(row).encode('utf8'))
-    return myList
+        my_list.append(str(row).encode('utf8'))
+    return my_list
 
 
 def decode_json_to_list(json_obj):
     """
-
     :rtype : list
     """
-    jsonDec = json.decoder.JSONDecoder()
-    myList = jsonDec.decode(json_obj)
-    return myList
+    jsondec = json.decoder.JSONDecoder()
+    my_list = jsondec.decode(json_obj)
+    return my_list
 
 
 def passes_blacklist(sql):
@@ -197,6 +196,11 @@ def url_get_rows(request):
 
 def url_get_query_id(request):
     return get_int_from_request(request, 'query_id', None)
+
+
+def url_get_template_id(request):
+    return get_int_from_request(request, 'template_id', None)
+
 
 
 def url_get_log_id(request):

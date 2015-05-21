@@ -1,0 +1,39 @@
+<h3 class="querylist-header">All templates</h3>
+<div id="queries">
+    <input class="search" placeholder="Search"/>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Template</th>
+            <th>Created</th>
+            <th>Description</th>
+            {% if can_change %}
+            <th>Delete</th>
+            {% endif %}
+        </tr>
+        </thead>
+        <tbody class="list">
+        {% for object in template_list %}
+        <tr>
+            <td class="name">
+                <a href="template_{{ object.id }}/">{{ object.title }}</a>
+            </td>
+            <td>{{ object.created_at|date:"SHORT_DATE_FORMAT" }}
+                {% if object.created_by_user %}
+                by {{ object.created_by_user }}
+                {% endif %}
+            </td>
+            <td>
+                {{ object.description }}
+            </td>
+            <td class="icon-cell">
+                {% if can_change %}
+                <a href="template_{{ object.id }}/delete"><i class="glyphicon glyphicon-trash"></i></a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+

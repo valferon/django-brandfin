@@ -9,6 +9,6 @@ setup(
     author_email = "valferon@gmail.com",
     description = "A package to create reports from existing databases by running sql queries against them. Modified version of SQL-EXPLORER",
     url = "",
-    include_package_data = True
+    include_package_data = True, requires=['sqlalchemy', 'sqlalchemy']
 )
 
