@@ -408,8 +408,6 @@ class TemplateView(ExplorerContextMixin, View):
         template, form = TemplateView.get_instance_and_form(request, template_id)
         success = form.is_valid() and form.save()
 
-        if form.has_changed():
-            template.log(request.user)
         vm = template_viewmodel(request, template, form=form, message="Template saved." if success else None)
         return self.render_template('brandfin/template.html', vm)
 

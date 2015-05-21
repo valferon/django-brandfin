@@ -138,6 +138,9 @@ class ReportTemplate(models.Model):
         log_entry = QueryLog(sql=self.sql, query_id=self.id, run_by_user=user, is_playground=not bool(self.id))
         log_entry.save()
 
+    def get_absolute_url(self):
+        return reverse("template_detail", kwargs={'template_id': self.id})
+
     @property
     def shared(self):
         return self.id in set(sum(app_settings.EXPLORER_GET_USER_QUERY_VIEWS().values(), []))
