@@ -131,7 +131,14 @@ ExplorerEditor.prototype.bind = function() {
 
     $("#refresh_data_button").click(function() {
         this.$form.attr('action', '../' + this.queryId + '/refresh');
+    }.bind(this));
 
+    $("#save_template_button").click(function() {
+        this.$form.attr('action', '');
+    }.bind(this));
+
+    $("#save_to_report_button").click(function() {
+        this.$form.attr('action', '../new/');
     }.bind(this));
 
     $("#refresh_button").click(function(e) {
