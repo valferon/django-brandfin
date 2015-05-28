@@ -327,7 +327,7 @@ class QueryView(ExplorerContextMixin, View):
 
         if form.has_changed():
             query.log(request.user)
-        vm = query_viewmodel(request, query, form=form, message="Query saved." if success else None)
+        vm = query_viewmodel(request, query, form=form, message="Report saved." if success else None)
         return self.render_template('brandfin/query.html', vm)
 
     @staticmethod
