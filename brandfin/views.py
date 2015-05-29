@@ -266,7 +266,7 @@ class RefreshQueryView(ExplorerContextMixin, UpdateView):
         success = form.is_valid() and form.save()
         if form.has_changed():
             query.log(request.user)
-        vm = query_viewmodel(request, query, form=form, message="Query Data Refreshed." if success else None)
+        vm = query_viewmodel(request, query, form=form, message="Report Data Refreshed." if success else None)
         return self.render_template('brandfin/query.html', vm)
 
 
