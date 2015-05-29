@@ -5,7 +5,7 @@ from brandfin.models import Query
 
 
 class Command(BaseCommand):
-    help = 'Refresh the daily scheduled reports'
+    help = 'Refresh the weekly scheduled reports'
 
     def handle(self, *args, **options):
 
@@ -16,12 +16,12 @@ class Command(BaseCommand):
         """
 
         today = datetime.date.today().strftime('%Y-%m-%d')
-        scheduled_reports = Query.objects.filter(daily_run=True)
+        scheduled_reports = Query.objects.filter(weekly_run=True)
 
         for report in scheduled_reports:
             report.pk = None
 
-            report.title = report.title+' - Daily report : '+today
+            report.title = report.title+' - Weekly report : '+today
             report.result_headers = None
             report.result_data = None
             report.daily_run = False

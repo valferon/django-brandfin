@@ -69,16 +69,16 @@
                         </div>
                     </div>
                 {% endif %}
+
+
                 <div class="form-group">
-                        <label for="id_title" class="col-sm-2 control-label" data-toggle="tooltip" data-original-title="A copy of this report will be ran and saved every day">Run this report daily</label>
-                        <div class="col-sm-10">
-                            <input type="checkbox" id="id_daily_run" style="margin-top: 15px" name="daily_run" {% if query.daily_run %}checked{% endif %} data-toggle="tooltip" data-original-title="A copy of this report will be ran and saved every day" />
+                        <label data-original-title="Schedule copy of the report" class="col-sm-2 control-label" for="id_title" data-toggle="tooltip">Report Scheduling</label>
+                        <div class="col-sm-2">
+                            Daily <input id="id_daily_run" name="daily_run" {% if query.daily_run %}checked{% endif %} data-toggle="tooltip" data-original-title="A copy of this report will be ran and saved every day" type="checkbox">
                         </div>
-                    </div>
-                <div class="form-group">
-                        <label for="id_title" class="col-sm-2 control-label" data-toggle="tooltip" data-original-title="A copy of this report will be ran and saved every week">Run this report weekly </label>
-                        <div class="col-sm-10">
-                            <input type="checkbox" id="id_weekly_run" style="margin-top: 15px" name="daily_run" {% if query.weekly_run %}checked{% endif %} data-toggle="tooltip" data-original-title="A copy of this report will be ran and saved every week" />
+
+                        <div class="col-sm-2">
+                            Weekly <input id="id_weekly_run" name="weekly_run" {% if query.weekly_run %}checked{% endif %} data-toggle="tooltip" data-original-title="A copy of this report will be ran and saved every week" type="checkbox">
                         </div>
                     </div>
                 {% if form.sql.errors %}{% for error in form.sql.errors %}
