@@ -24,7 +24,7 @@ class Command(BaseCommand):
             report.title = report.title+' - Weekly report : '+today
             report.result_headers = None
             report.result_data = None
-            report.daily_run = False
+            report.weekly_run = False
             report.execute()
             report.save()
             self.stdout.write('Successfully refreshed report "%s"' %report.title )
