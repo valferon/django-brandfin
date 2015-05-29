@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, url
 
-from views import QueryView, CreateQueryView, PlayQueryView, DeleteQueryView, ListQueryView, ListQueryLogView, RefreshQueryView, TemplateView, CreateTemplateView, DeleteTemplateView
+from views import QueryView, CreateQueryView, PlayQueryView, DeleteQueryView, ListQueryView, ListQueryLogView, RefreshQueryView, TemplateView, CreateTemplateView, DeleteTemplateView, JqueryView
 
 
 urlpatterns = patterns('',
@@ -18,5 +18,6 @@ urlpatterns = patterns('',
                        url(r'schema/$', 'brandfin.views.schema', name='explorer_schema'),
                        url(r'logs/$', ListQueryLogView.as_view(), name='explorer_logs'),
                        url(r'format/$', 'brandfin.views.format_sql', name='format_sql'),
+                       url(r'jquery/$', JqueryView.as_view(), name='jquery'),
                        url(r'^$', ListQueryView.as_view(), name='explorer_index'),
                        )

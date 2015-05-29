@@ -52,7 +52,8 @@ class QueryForm(ModelForm):
     class Meta:
         model = Query
         daily_run = forms.BooleanField(initial=False)
-        fields = ['title', 'sql', 'description', 'created_by_user', 'daily_run']
+        weekly_run = forms.BooleanField(initial=False)
+        fields = ['title', 'sql', 'description', 'created_by_user', 'daily_run', 'weekly_run']
 
 class TemplateForm(ModelForm):
     sql = SqlField()

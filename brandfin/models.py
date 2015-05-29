@@ -28,6 +28,7 @@ class Query(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     last_run_date = models.DateTimeField(auto_now=True)
     daily_run = models.BooleanField(default=False, help_text="Schedule query to run daily")
+    weekly_run = models.BooleanField(default=False, help_text="Schedule query to run weekly")
 
     def __unicode__(self):
         return self.title
